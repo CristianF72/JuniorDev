@@ -136,16 +136,25 @@ namespace WindowsFormsApp
             IEnumerable<int> result = (from value in Enumerable.Range(1, 20) where value%2 == 0
                                       select value).Skip(3).Take(5);
 
+            IEnumerable<string> items = new List<string>() { "unu", "doi", "trei" };
+
 
             if (result.Any(v => v > 10))
             {
                 Console.WriteLine("Sunt valori care indeplinesc conditiile selectiei si sunt mai mari decat 10");
             }
             else
+            {
                 Console.WriteLine("Conditiile selectiei nu pot fi indeplinite si/sau valorile nu depasesc valoarea 10");
+            }
 
-            //To do: vezi task 8
-            
+
+            //Technical task 8: You have a type that is IEnumerable<string> items, make it so that
+            //it display all members in the following expression Console.Writeline(items)
+            //https://stackoverflow.com/questions/35206799/getting-all-elements-from-an-ienumerable
+
+            Console.WriteLine(String.Join(" ", items));
+
 
             if (result.All(v => v > 5))
             {
@@ -153,7 +162,6 @@ namespace WindowsFormsApp
                 {
                     Console.WriteLine(value);
                 }
-                    
             }
             
         }
@@ -174,6 +182,45 @@ namespace WindowsFormsApp
                           select value).First();
 
             Console.WriteLine(result);
+        }
+
+        //http://www.tutorialsteacher.com/csharp/csharp-extension-method
+        private void ExtensionMethodButton(object sender, EventArgs e)
+        {
+            IEnumerable<int> result = from value in Enumerable.Range(1, 20)
+                                      where value % 2 == 0
+                                      select value;
+
+            foreach (var value in result)
+            {
+                if (value.IsDividedBy(4))
+                {
+                    Console.WriteLine(value);
+                }
+            }
+            
+        }
+
+        private void BoxingUnboxingButton(object sender, EventArgs e)
+        {
+            List<object> items = new List<object>() { "unu", "doi", "trei" };
+
+            items.Add("patru");
+
+            for (int j = 5; j < 10; j++)
+            {
+                items.Add(j);
+            }
+
+            foreach (var item in items)
+            {
+                Console.WriteLine(item);
+            }
+
+            for (var i = 0; i < items.Count-1; i++)
+            {
+                //if (items[1].GetType() == typeof(int))
+            }
         }
     }
 
@@ -212,4 +259,13 @@ namespace WindowsFormsApp
             return str1 + str2;
         }
     }
+
+    public static class ExtensionMethod
+    {
+        public static bool IsDividedBy(this int i, int value)
+        {
+            return i%value==0;
+        }
+    }
+
 }
