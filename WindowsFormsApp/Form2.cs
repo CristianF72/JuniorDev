@@ -136,9 +136,7 @@ namespace WindowsFormsApp
             IEnumerable<int> result = (from value in Enumerable.Range(1, 20) where value%2 == 0
                                       select value).Skip(3).Take(5);
 
-            IEnumerable<string> items = new List<string>() { "unu", "doi", "trei" };
-
-
+            
             if (result.Any(v => v > 10))
             {
                 Console.WriteLine("Sunt valori care indeplinesc conditiile selectiei si sunt mai mari decat 10");
@@ -153,7 +151,14 @@ namespace WindowsFormsApp
             //it display all members in the following expression Console.Writeline(items)
             //https://stackoverflow.com/questions/35206799/getting-all-elements-from-an-ienumerable
 
-            Console.WriteLine(String.Join(" ", items));
+            IEnumerable<string> items = new List<string>() { "unu", "doi", "trei" };
+
+            var JoinItems = new Func<IEnumerable<string>, string>(x => { return String.Join(", ", x); });
+
+            //items = JoinItems(items);
+
+
+            Console.WriteLine(items);
 
 
             if (result.All(v => v > 5))
@@ -201,6 +206,7 @@ namespace WindowsFormsApp
             
         }
 
+        //https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/types/boxing-and-unboxing
         private void BoxingUnboxingButton(object sender, EventArgs e)
         {
             List<object> items = new List<object>() { "unu", "doi", "trei" };
@@ -217,10 +223,16 @@ namespace WindowsFormsApp
                 Console.WriteLine(item);
             }
 
-            for (var i = 0; i < items.Count-1; i++)
+            var sum = 0;
+
+            for (var i = 0; i < items.Count; i++)
             {
-                //if (items[1].GetType() == typeof(int))
+                if (items[i].GetType() == typeof(int))
+                {
+                    sum += (int)items[i] ^ 2;
+                }
             }
+            Console.WriteLine("Sum: " + sum);
         }
     }
 
