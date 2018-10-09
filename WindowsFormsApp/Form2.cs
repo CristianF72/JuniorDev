@@ -131,6 +131,8 @@ namespace WindowsFormsApp
             Console.WriteLine(genericDelegate.Concate("Hello, buey ", "World!!"));
         }
 
+        IEnumerable<string> items = new string[] { "unu", "doi", "trei" };
+
         private void LinQButton(object sender, EventArgs e)
         {
             IEnumerable<int> result = (from value in Enumerable.Range(1, 20) where value%2 == 0
@@ -151,12 +153,21 @@ namespace WindowsFormsApp
             //it display all members in the following expression Console.Writeline(items)
             //https://stackoverflow.com/questions/35206799/getting-all-elements-from-an-ienumerable
 
-            IEnumerable<string> items = new List<string>() { "unu", "doi", "trei" };
+            
 
             var JoinItems = new Func<IEnumerable<string>, string>(x => { return String.Join(", ", x); });
 
-            //items = JoinItems(items);
+            var JoinItems1 = JoinItems(items);
 
+            Console.WriteLine(JoinItems1);
+
+            //string GetStringFromItems(IEnumerable<string> items)
+            //{
+
+            //    return items = JoinItems(items);
+            //}
+
+            //GetStringFromItems(items);
 
             Console.WriteLine(items);
 
@@ -170,6 +181,8 @@ namespace WindowsFormsApp
             }
             
         }
+
+        
 
         private void LinQSingleExampleButton(object sender, EventArgs e)
         {
