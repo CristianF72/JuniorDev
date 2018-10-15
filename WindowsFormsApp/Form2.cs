@@ -155,25 +155,7 @@ namespace WindowsFormsApp
 
             IEnumerable<string> items = new string[] { "unu", "doi", "trei" };
 
-            var JoinItems = new Func<IEnumerable<string>, string>(x => { return String.Join(", ", x); });
-
-            var items1 = JoinItems(items);
-
-            //string items = default(string);
-
-            //items2 = TypeConverter(items);
-
-            //items = items1;
-
-            //Console.WriteLine(JoinItems);
-
-            //string GetStringFromItems(IEnumerable<string> items)
-            //{
-
-            //    return items = JoinItems(items);
-            //}
-
-            //GetStringFromItems(items);
+            items = new WriteEnum { Items = items };
 
             Console.WriteLine(items);
 
@@ -254,6 +236,7 @@ namespace WindowsFormsApp
             Console.WriteLine("Sum: " + sum);
         }
 
+        //https://www.youtube.com/watch?v=5C7W98VVI88
         private void ExplicitInterfaceImplementationButton(object sender, EventArgs e)
         {
             ImpVsExpIntImp x = new ImpVsExpIntImp();
@@ -335,6 +318,28 @@ namespace WindowsFormsApp
     interface I2
     {
         void InterfaceMethod();
+    }
+
+    class WriteEnum : IEnumerable<string>
+    {
+        public IEnumerable<string> Items { get; set; }
+        public IEnumerator<string> GetEnumerator()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override string ToString()
+        {
+            
+            string output = String.Join(",", Items);
+           
+            return output;
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
     }
 
 }
