@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -131,7 +132,7 @@ namespace WindowsFormsApp
             Console.WriteLine(genericDelegate.Concate("Hello, buey ", "World!!"));
         }
 
-        IEnumerable<string> items = new string[] { "unu", "doi", "trei" };
+        
 
         private void LinQButton(object sender, EventArgs e)
         {
@@ -148,18 +149,23 @@ namespace WindowsFormsApp
                 Console.WriteLine("Conditiile selectiei nu pot fi indeplinite si/sau valorile nu depasesc valoarea 10");
             }
 
-
             //Technical task 8: You have a type that is IEnumerable<string> items, make it so that
             //it display all members in the following expression Console.Writeline(items)
             //https://stackoverflow.com/questions/35206799/getting-all-elements-from-an-ienumerable
 
-            
+            IEnumerable<string> items = new string[] { "unu", "doi", "trei" };
 
             var JoinItems = new Func<IEnumerable<string>, string>(x => { return String.Join(", ", x); });
 
-            var JoinItems1 = JoinItems(items);
+            var items1 = JoinItems(items);
 
-            Console.WriteLine(JoinItems1);
+            //string items = default(string);
+
+            //items2 = TypeConverter(items);
+
+            //items = items1;
+
+            //Console.WriteLine(JoinItems);
 
             //string GetStringFromItems(IEnumerable<string> items)
             //{
@@ -247,6 +253,16 @@ namespace WindowsFormsApp
             }
             Console.WriteLine("Sum: " + sum);
         }
+
+        private void ExplicitInterfaceImplementationButton(object sender, EventArgs e)
+        {
+            ImpVsExpIntImp x = new ImpVsExpIntImp();
+
+            x.InterfaceMethod();
+            ((I1)x).InterfaceMethod();
+            ((I2)x).InterfaceMethod();
+
+        }
     }
 
     //http://www.tutorialsteacher.com/csharp/csharp-generics
@@ -291,6 +307,34 @@ namespace WindowsFormsApp
         {
             return i%value==0;
         }
+    }
+
+    public class ImpVsExpIntImp: I1, I2
+    {
+        public void InterfaceMethod()
+        {
+            Console.WriteLine("Implicit Interface Method");
+        }
+
+        void I1.InterfaceMethod()
+        {
+            Console.WriteLine("I1 Explicit Interface Method");
+        }
+
+        void I2.InterfaceMethod()
+        {
+            Console.WriteLine("I2 Explicit Interface Method");
+        }
+    }
+
+    interface I1
+    {
+        void InterfaceMethod();
+    }
+
+    interface I2
+    {
+        void InterfaceMethod();
     }
 
 }
