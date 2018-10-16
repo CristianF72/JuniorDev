@@ -4,9 +4,11 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static WindowsFormsApp.Form2;
@@ -246,6 +248,70 @@ namespace WindowsFormsApp
             ((I2)x).InterfaceMethod();
 
         }
+
+        //https://www.dotnetperls.com/async
+        private void AsyncAwaitExampleButton(object sender, EventArgs e)
+        {
+            while (true)
+            {
+                // Start computation.
+                Example();
+                Console.WriteLine("No bagă");
+                // Handle user input.
+                string result = Console.ReadLine();
+                Console.WriteLine("Thread with ID: " + Thread.CurrentThread.ManagedThreadId + " said that you typed: " + result);
+            }
+        }
+
+        static async void Example()
+        {
+            // This method runs asynchronously.
+            await Task.Run(() =>
+            {
+                while (true)
+                {
+                    Thread.Sleep(1000);
+                    var result = Allocate();
+                    Console.WriteLine("Thread with ID: " + Thread.CurrentThread.ManagedThreadId + " compute: " + result);
+                }
+            });
+            
+        }
+
+        static int Allocate()
+        {
+            // Compute total count of digits in strings.
+            int size = 0;
+                for (int i = 0; i < 100; i++)
+                {
+                    Thread.Sleep(50);
+                    string value = i.ToString();
+                    size += value.Length;
+                }
+            return size;
+        }
+
+        //private void ThreadsSplittingTaskButton(object sender, EventArgs e)
+        //{
+        //    string s = "If you have experience with multithreaded programming " +
+        //               "in any programming language, you are already familiar with the typical examples of it. " +
+        //               "Usually, multithreaded programming is associated with user interface-based applications " +
+        //               "that need to perform a time-consuming operation without affecting the end user. " +
+        //               "Take any reference book and open it to the chapter dedicated to threads: can you find " +
+        //               "a multithreaded example that can perform a mathematical calculation running in parallel with your user interface?";
+
+        //    List<Thread> threads = new List<Thread>();
+
+        //    for (var i = 0; i < s.Length; i += 10)
+        //    {
+        //        threads = new Thread(ComputeStringPart(i)).Start();
+        //    }
+        //}
+
+        //static ThreadStart ComputeStringPart(int i)
+        //{
+            
+        //}
     }
 
     //http://www.tutorialsteacher.com/csharp/csharp-generics
