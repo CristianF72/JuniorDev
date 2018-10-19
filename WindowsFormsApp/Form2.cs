@@ -3,14 +3,17 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Markup;
 using static WindowsFormsApp.Form2;
 
 namespace WindowsFormsApp
@@ -192,6 +195,7 @@ namespace WindowsFormsApp
             Console.WriteLine(result);
         }
 
+        // Week 40 - #5 - Extension methods
         //http://www.tutorialsteacher.com/csharp/csharp-extension-method
         private void ExtensionMethodButton(object sender, EventArgs e)
         {
@@ -209,6 +213,7 @@ namespace WindowsFormsApp
             
         }
 
+        // Week 40 - #9 - Boxing/Unboxing
         //https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/types/boxing-and-unboxing
         private void BoxingUnboxingButton(object sender, EventArgs e)
         {
@@ -238,6 +243,7 @@ namespace WindowsFormsApp
             Console.WriteLine("Sum: " + sum);
         }
 
+        // Week 41 - #12 - Explicit interface implementation
         //https://www.youtube.com/watch?v=5C7W98VVI88
         private void ExplicitInterfaceImplementationButton(object sender, EventArgs e)
         {
@@ -249,6 +255,7 @@ namespace WindowsFormsApp
 
         }
 
+        // Week 41 - #13 - Async/Await
         //https://www.dotnetperls.com/async
         private void AsyncAwaitExampleButton(object sender, EventArgs e)
         {
@@ -291,27 +298,125 @@ namespace WindowsFormsApp
             return size;
         }
 
-        //private void ThreadsSplittingTaskButton(object sender, EventArgs e)
-        //{
-        //    string s = "If you have experience with multithreaded programming " +
-        //               "in any programming language, you are already familiar with the typical examples of it. " +
-        //               "Usually, multithreaded programming is associated with user interface-based applications " +
-        //               "that need to perform a time-consuming operation without affecting the end user. " +
-        //               "Take any reference book and open it to the chapter dedicated to threads: can you find " +
-        //               "a multithreaded example that can perform a mathematical calculation running in parallel with your user interface?";
+        // Week 42 - #15b - Start multiple threads and continue when all it's done
+        private void ThreadsSplittingTaskButton(object sender, EventArgs e)
+        {
 
-        //    List<Thread> threads = new List<Thread>();
+            RunTasks();
 
-        //    for (var i = 0; i < s.Length; i += 10)
-        //    {
-        //        threads = new Thread(ComputeStringPart(i)).Start();
-        //    }
-        //}
+            async Task RunTasks()
+            {
+                var tasks = new List<Task<int>> { };
 
-        //static ThreadStart ComputeStringPart(int i)
-        //{
-            
-        //}
+                tasks.Add(Task.Run(() => CalculatePartOfArray(0)));
+                tasks.Add(Task.Run(() => CalculatePartOfArray(4)));
+                tasks.Add(Task.Run(() => CalculatePartOfArray(8)));
+
+                Parallel.ForEach(tasks, task =>
+                {
+                    Console.WriteLine("Task, with id: " + task.Id + " calculate this sum: " + task.Result);
+                });
+
+                await Task.WhenAll(tasks).ContinueWith(done =>
+                {
+                    int total = 0;
+                    for (int k = 0; k<tasks.Count; k++)
+                    {
+                        total += tasks.ElementAt(k).Result;
+                    }
+                    Console.WriteLine("Tasks finished their jobs, the total is: " + total);
+                });
+            }
+        }
+
+        static int CalculatePartOfArray(int i)
+        {
+            int sum = 0;
+            int[] values = { 1, 3, 5, 7, 2, 4, 6, 8, 10, 20, 30, 40 };
+            for (int j=i; j<=i+3; j++)
+            {
+                sum += values[j];
+            }
+            return sum;
+        }
+
+        // Week 41 - #10 - Tuple VS ValueTuple
+        //https://www.dotnetperls.com/valuetuple
+
+        static Tuple<int, string> Method1()
+        {
+            return new Tuple<int, string>(10, "bird");
+        }
+
+        static (int, string) Method2()
+        {
+            return (10, "bird");
+        }
+
+        private void TupleVsTupleValueButton(object sender, EventArgs e)
+        {
+            const int _max = 1000000;
+
+            // Version 1: use Tuple class.
+            var s1 = Stopwatch.StartNew();
+            for (int i = 0; i < _max; i++)
+            {
+                var result = Method1();
+                if (result.Item1 != 10)
+                {
+                    return;
+                }
+            }
+            s1.Stop();
+
+            // Version 2: use ValueTuple.
+            var s2 = Stopwatch.StartNew();
+            for (int i = 0; i < _max; i++)
+            {
+                var result = Method2();
+                if (result.Item1 != 10)
+                {
+                    return;
+                }
+            }
+            s2.Stop();
+            Console.WriteLine(s1.Elapsed.TotalMilliseconds);
+            Console.WriteLine(s2.Elapsed.TotalMilliseconds);
+        }
+
+        // Week 41 - #11 - Expression-bodied members
+        private void ExpressionBodiedMembersButton(object sender, EventArgs e)
+        {
+            Person p = new Person("Cristian", "Frenț");
+            Console.WriteLine(p);
+            p.DisplayName();
+        }
+
+        private void DeadlockExampleButton(object sender, EventArgs e)
+        {
+                var frm = new Form3();
+                frm.Location = this.Location;
+                frm.StartPosition = FormStartPosition.Manual;
+                frm.FormClosing += delegate { this.Show(); };
+                frm.Show();
+                this.Hide();
+        }
+
+    }
+
+    public class Person
+    {
+        public Person(string firstName, string lastName)
+        {
+            fname = firstName;
+            lname = lastName;
+        }
+
+        private string fname;
+        private string lname;
+
+        public override string ToString() => $"{fname} {lname}".Trim();
+        public void DisplayName() => Console.WriteLine(ToString());
     }
 
     //http://www.tutorialsteacher.com/csharp/csharp-generics
