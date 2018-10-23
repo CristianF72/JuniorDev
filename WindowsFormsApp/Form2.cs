@@ -392,6 +392,8 @@ namespace WindowsFormsApp
             p.DisplayName();
         }
 
+
+        // Week 42 - #15d Deadlocks using UI thread – winform app
         private void DeadlockExampleButton(object sender, EventArgs e)
         {
                 var frm = new Form3();
