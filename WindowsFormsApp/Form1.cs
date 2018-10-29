@@ -42,10 +42,10 @@ namespace WindowsFormsApp
             {
                 if ((continut = openFileDialog.OpenFile()) != null)
                 {
-                    string numeFisier = openFileDialog.FileName;
-                    string textFisier = File.ReadAllText(numeFisier);
+                    string fileName = openFileDialog.FileName;
+                    string textFisier = File.ReadAllText(fileName);
                     richTextBox1.Text = textFisier;
-                    richTextBox3.Text = numeFisier;
+                    richTextBox3.Text = fileName;
                 }
                 
             }
@@ -230,5 +230,6 @@ namespace WindowsFormsApp
             frm.Show();
             this.Hide();
         }
+        
     }
 }

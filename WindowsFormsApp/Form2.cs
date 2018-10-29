@@ -312,13 +312,20 @@ namespace WindowsFormsApp
                 tasks.Add(Task.Run(() => CalculatePartOfArray(4)));
                 tasks.Add(Task.Run(() => CalculatePartOfArray(8)));
 
+                
+
                 Parallel.ForEach(tasks, task =>
                 {
-                    Console.WriteLine("Task, with id: " + task.Id + " calculate this sum: " + task.Result);
-                });
 
+                    Console.WriteLine("Task, with id: " + task.Id + " calculate this sum: " + task.Result);
+                    Interlocked.Add(ref partialTotal, task.Result);
+                    Console.WriteLine("The partial total is: " + partialTotal);
+
+                });
+                
                 await Task.WhenAll(tasks).ContinueWith(done =>
                 {
+                    partialTotal = 0;
                     int total = 0;
                     for (int k = 0; k<tasks.Count; k++)
                     {
@@ -329,6 +336,8 @@ namespace WindowsFormsApp
             }
         }
 
+        static int partialTotal;
+
         static int CalculatePartOfArray(int i)
         {
             int sum = 0;
@@ -337,6 +346,7 @@ namespace WindowsFormsApp
             {
                 sum += values[j];
             }
+
             return sum;
         }
 
@@ -387,7 +397,7 @@ namespace WindowsFormsApp
         // Week 41 - #11 - Expression-bodied members
         private void ExpressionBodiedMembersButton(object sender, EventArgs e)
         {
-            Person p = new Person("Cristian", "Frenț");
+            Person p = new Person("Cristian", "Frent");
             Console.WriteLine(p);
             p.DisplayName();
         }

@@ -21,15 +21,15 @@ namespace WindowsFormsApp
         //https://medium.com/bynder-tech/c-why-you-should-use-configureawait-false-in-your-library-code-d7837dce3d7f
         private void DoCurlAsyncButton(object sender, EventArgs e)
         {
-            var wirtekContents = DoCurlAsync();
-            wirtekContents.Wait();
+            var wirtekContents = DoCurlAsync().Result;
+            //wirtekContents.Wait();
             Console.WriteLine(wirtekContents);
         }
 
         async Task<string> DoCurlAsync()
         {
             using (var httpClient = new HttpClient())
-            using (var httpResponse = await httpClient.GetAsync("http://vikings.wirtek.ro/"))
+            using (var httpResponse = await httpClient.GetAsync("http://vikings.wirtek.ro/").ConfigureAwait(false))
             {
                 return await httpResponse.Content.ReadAsStringAsync();
             }
