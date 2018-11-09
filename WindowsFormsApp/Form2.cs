@@ -8,6 +8,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
 using System.Threading;
@@ -406,14 +407,58 @@ namespace WindowsFormsApp
         // Week 42 - #15d Deadlocks using UI thread – winform app
         private void DeadlockExampleButton(object sender, EventArgs e)
         {
-                var frm = new Form3();
-                frm.Location = this.Location;
-                frm.StartPosition = FormStartPosition.Manual;
-                frm.FormClosing += delegate { this.Show(); };
-                frm.Show();
-                this.Hide();
+            var frm = new Form3();
+            frm.Location = this.Location;
+            frm.StartPosition = FormStartPosition.Manual;
+            frm.FormClosing += delegate { this.Show(); };
+            frm.Show();
+            this.Hide();
         }
 
+        //Week 44 - Mutable, Immutable
+        //https://www.c-sharpcorner.com/article/mutable-and-immutable-class-in-c-sharp/
+        private void MutableImmutableButton(object sender, EventArgs e)
+        {
+            //immutable
+            string str = string.Empty;
+
+            for (int i = 0; i < 10; i++)
+            {
+                str += "Modified ";
+                IntPtr p = Marshal.StringToCoTaskMemUni(str);
+                Console.WriteLine(str);
+                Console.WriteLine(p);
+            }
+
+            //mutable
+            StringBuilder strB = new StringBuilder();
+
+            StringBuilder initialStrB = strB;
+
+            for (int i = 0; i < 10; i++)
+            {
+                strB.Append("Modified ");
+                Console.WriteLine(strB);
+            }
+            StringBuilder finalStrB = strB;
+
+            Console.WriteLine("Initial StringBuilder = final StringBuilder?: " + object.ReferenceEquals(initialStrB, finalStrB));
+        }
+    }
+
+    class ImmutableClass
+    {
+        private readonly string myStr;
+
+        public ImmutableClass(string str)
+        {
+            myStr = str;
+        }
+
+        public string GetStr
+        {
+            get { return myStr; }
+        }
     }
 
     public class Person
