@@ -444,6 +444,60 @@ namespace WindowsFormsApp
 
             Console.WriteLine("Initial StringBuilder = final StringBuilder?: " + object.ReferenceEquals(initialStrB, finalStrB));
         }
+
+        //Week 44 - Ref – pass string as param and modify it inside a method, try with or without ref.
+        //Pass a reference type with ref and reassign it inside the method. Try the same without ref.
+        //https://stackoverflow.com/questions/10792603/how-are-strings-passed-in-net
+        //https://www.codeproject.com/Articles/144771/Passing-Strings-by-Ref
+        //http://www.yoda.arachsys.com/csharp/parameters.html
+        private void PassStringOrReferenceAsParamButton(object sender, EventArgs e)
+        {
+            string strMain = "main";
+            DoSomething(strMain);
+
+            Console.WriteLine("Passing string as parameter result, without ref, after modify: " + strMain); // What gets printed?
+
+            DoSomethingRef(ref strMain);
+
+            Console.WriteLine("Passing string as parameter result, WITH REF, after modify: " + strMain);
+
+            void DoSomething(string strLocal)
+            {
+                strLocal = "local";
+            }
+
+            void DoSomethingRef(ref string strLocal)
+            {
+                strLocal = "local";
+            }
+
+            var objMain = new MutableThing();
+            objMain.ChangeMe = 5;
+            Console.WriteLine("Reference type property, after set first value: " + objMain.ChangeMe);  //it's 5 on objMain
+
+            DoSomething1(objMain);             //now we try to set property to 0 on objLocal
+            Console.WriteLine("Passing a reference type, without ref, after modify value: " + objMain.ChangeMe);  //it's still 5 on objMain
+
+            DoSomething1Ref(ref objMain);
+
+            Console.WriteLine("Passing a reference type, WITH REF, after modify value: " + objMain.ChangeMe);
+
+            void DoSomething1(MutableThing objLocal)
+            {
+                objLocal = new MutableThing();
+                objLocal.ChangeMe = 0;
+            }
+
+            void DoSomething1Ref(ref MutableThing objLocal)
+            {
+                objLocal.ChangeMe = 0;
+            }
+        }
+    }
+
+    class MutableThing
+    {
+        public int ChangeMe { get; set; }
     }
 
     class ImmutableClass
