@@ -463,16 +463,16 @@ namespace WindowsFormsApp
 
             void DoSomething(string strLocal)
             {
-                strLocal = "local";
+                strLocal += "local";
+                Console.WriteLine(strLocal);
             }
 
             void DoSomethingRef(ref string strLocal)
             {
-                strLocal = "local";
+                strLocal += "local";
             }
 
-            var objMain = new MutableThing();
-            objMain.ChangeMe = 5;
+            var objMain = new MutableThing {ChangeMe = 5};
             Console.WriteLine("Reference type property, after set first value: " + objMain.ChangeMe);  //it's 5 on objMain
 
             DoSomething1(objMain);             //now we try to set property to 0 on objLocal
@@ -485,12 +485,39 @@ namespace WindowsFormsApp
             void DoSomething1(MutableThing objLocal)
             {
                 objLocal = new MutableThing();
-                objLocal.ChangeMe = 0;
+                objLocal.ChangeMe = 2;
             }
 
             void DoSomething1Ref(ref MutableThing objLocal)
             {
-                objLocal.ChangeMe = 0;
+                objLocal = new MutableThing();
+                objLocal.ChangeMe = 1;
+            }
+        }
+
+
+        //Week 45 - Proxy Design Pattern.
+        private void ProxyDesignPatternButton(object sender, EventArgs e)
+        {
+            {
+                var frm = new Form4();
+                frm.Location = this.Location;
+                frm.StartPosition = FormStartPosition.Manual;
+                frm.FormClosing += delegate { this.Show(); };
+                frm.Show();
+                this.Hide();
+            }
+        }
+
+        private void FacadeDesignPatternButton(object sender, EventArgs e)
+        {
+            {
+                var frm = new Form5();
+                frm.Location = this.Location;
+                frm.StartPosition = FormStartPosition.Manual;
+                frm.FormClosing += delegate { this.Show(); };
+                frm.Show();
+                this.Hide();
             }
         }
     }
